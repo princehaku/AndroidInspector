@@ -1,0 +1,21 @@
+{
+  "name": "nw-demo",
+  "main": "index.html",
+    "window": {
+        "title" : "Oschina",
+        "icon": "app/img/favicon.ico",
+        "as_desktop" : false,
+        "resizable" : false,
+        "always-on-top" : false,
+        "fullscreen" : false,
+        "kiosk" : false,
+        "frame" : true,
+        "toolbar": true,
+        "width": 1000,
+        "height": 650,
+        "min_width": 900,
+        "min_height": 650,
+        "max_width": 900,
+        "max_height": 650
+    }
+}
