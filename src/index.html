@@ -7,20 +7,52 @@
     <script src="libs/jquery-1.11.0.min.js"></script>
     <script src="libs/bootstrap/js/bootstrap.min.js"></script>
     <style>
+        body {
+            padding-top: 70px;
+        }
+
         .container {
             margin-top: 15px;
         }
 
+        .devname {
+            text-overflow: ellipsis;
+            word-break: break-all;
+            height: 20px;
+        }
+
         .op-btn {
             height: 21px;
+            width: 21px;
             line-height: 21px;
+        }
+
+        .op-btn img {
+            vertical-align: inherit;
         }
 
         .op-btn:hover {
             color: #269abc;
         }
+
+        .nav-control {
+            background-color: #eee;
+            border-radius: 4px;
+            border-top: solid 1px #e1e1e1;
+            border-bottom: solid 1px #e1e1e1;
+        }
+
+        .nav-control > li > a {
+            border-left: solid 1px #e1e1e1;
+        }
+
+        .nav-control li a {
+            padding: 10px 8px;
+        }
     </style>
-    <script src="js/add.js"></script>
+    <script src="js/AndroidDevice.js"></script>
+    <script src="js/mainpage.js"></script>
+    <script src="js/jphack.js"></script>
 </head>
 <body>
 <div class="container">
@@ -28,32 +60,102 @@
         <div class="col-md-4 column">
             <div class="row clearfix">
                 <ol class="breadcrumb">
-                    <li class="active">设备列表</li>
+                    <li class="active" style="width: 100%">
+                        <div style="float: left">
+                            <input type="checkbox" name="devall" class="checkallbox" cval="devid" val="">
+                            List of Devices
+                        </div>
+                        <div style="float: right">
+                            <span id="btn-sync" class="op-btn glyphicon glyphicon-retweet">&nbsp;</span>
+                        </div>
+                    </li>
                 </ol>
                 <table id="devlist" class="table table-hover table-bordered">
-                    <tr id="dev_template" style="display: none">
-                        <td>
-                            <span class="devname">&nbsp;</span>
-
-                            <div style="float: right">
-                                <span class="op-btn glyphicon glyphicon-cog">&nbsp;</span>
-                            </div>
-                        </td>
-                    </tr>
                 </table>
+                <div style="display: none">
+                    <table>
+                        <tr class="dev_template_original">
+                            <td>
+                                <label>
+                                    <input type="checkbox" class="devid" name="devid" val="">
+                                    <span class="devname">&nbsp;</span>
+                                </label>
+
+                                <div style="float: right">
+                                    <span class="btn-doing op-btn glyphicon indicator hide">
+                                        <img src="res/022.gif" width="16" height="16"/>
+                                    </span>
+                                    <span class="btn-status op-btn glyphicon glyphicon-stop">&nbsp;</span>
+                                    <span class="btn-opitions op-btn glyphicon glyphicon-cog">&nbsp;</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <ul class="nav nav-pills nav-control">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<strong
+                                class="caret"></strong></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" class="btn-action" module="apkinstall">Install APK</a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-action" shell="shell ls">Upload Files</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Switch<strong
+                                class="caret"></strong></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">WIFI ON</a>
+                            </li>
+                            <li>
+                                <a href="#">WIFI OFF</a>
+                            </li>
+                            <li>
+                                <a href="#">GPRS ON</a>
+                            </li>
+                            <li>
+                                <a href="#">GPRS OFF</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Script<strong
+                                class="caret"></strong></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Run SHELL</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Power<strong
+                                class="caret"></strong></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Restart</a>
+                            </li>
+                            <li>
+                                <a href="#">Shutdown</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="col-md-8 column">
             <div class="row clearfix">
                 <div>
                     <h1>
-                        Hello, world!
+                        AndroidInspector
                     </h1>
 
                     <p>
-                        This is a template for a simple marketing or informational website. It includes a large
-                        callout called the hero unit and three supporting pieces of content. Use it as a starting
-                        point to create something more unique.
+                        Under Constructing
                     </p>
 
                     <p>
@@ -63,77 +165,73 @@
             </div>
         </div>
 
-        <!-- 底部条 -->
+        <!-- 操作条 -->
 
         <div class="row clearfix">
             <div class="col-md-12 column">
-                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+                <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="#">AI</a>
+                        <a class="navbar-brand" href="#">AndroidInspector</a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">文件<strong
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Device<strong
                                         class="caret"></strong></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#">安装APK</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">上传文件</a>
+                                        <a href="#" class="btn-action" module="wirelessadb.html">Wireless Device</a>
                                     </li>
                                 </ul>
                             </li>
+                        </ul>
+                        <ul class="nav navbar-nav">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">控制<strong
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADB<strong
                                         class="caret"></strong></a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="#">WIFI</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">重启</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">关机</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">脚本<strong
-                                        class="caret"></strong></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="#">执行SHELL</a>
+                                        <a href="#" class="btn-action">Restart ADB</a>
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="#">检查更新</a>
+                                <a href="http://3haku.net" target="_blank">Check Updates</a>
                             </li>
                         </ul>
                     </div>
                 </nav>
             </div>
         </div>
-        <!-- 底部条完 -->
+        <!-- 操作条完 -->
     </div>
-
-
 </div>
+
 <script>
-    AndroidDevice.fetchDevLists(function (devLists) {
-        for (x in devLists) {
-            dev = devLists[x];
-            var devLi = $('#dev_template').clone();
-            devLi.find('.devname').html(dev[0]);
-            devLi.show();
-            $('#devlist').append(devLi);
-        }
+    $(document).ready(function () {
+        jphack();
+        MainPage.syncDevList();
+        MainPage.bindBtns();
     });
 </script>
+
+<!--模板浮层-->
+<div class="modal fade" id="moduleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Action</h4>
+            </div>
+            <div class="modal-body" id="moduleContainer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--模板浮层结束-->
+
 </body>
 </html>

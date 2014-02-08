@@ -1,9 +1,9 @@
 {
-  "name": "nw-demo",
+  "name": "Android Inspector",
   "main": "index.html",
     "window": {
-        "title" : "Oschina",
-        "icon": "app/img/favicon.ico",
+        "title" : "Android Inspector",
+        "icon": "favicon.png",
         "as_desktop" : false,
         "resizable" : false,
         "always-on-top" : false,

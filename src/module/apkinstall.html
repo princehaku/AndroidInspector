@@ -1,0 +1,19 @@
+<form role="form">
+    <div class="form-group">
+        <label for="apkinstall-url">Remote Url</label>
+        <input type="url" class="form-control" id="apkinstall-url" placeholder="apk download link">
+    </div>
+    <div class="form-group">
+        <label for="apkinstall-localfile">File input</label>
+        <input type="file" id="apkinstall-localfile" accept=".apk">
+
+        <p class="help-block">select apk from local computer</p>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="apkinstall-uninstallold" multiple /> uninstall current version
+        </label>
+    </div>
+    <button id="apkinstall-btn" type="button" class="btn btn-default">Install</button>
+</form>
+<script>apkinstall.init();</script>
