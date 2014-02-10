@@ -3,7 +3,7 @@
   "main": "index.html",
     "window": {
         "title" : "Android Inspector",
-        "icon": "favicon.png",
+        "icon": "nw.icns",
         "as_desktop" : false,
         "resizable" : false,
         "always-on-top" : false,

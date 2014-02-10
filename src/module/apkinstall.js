@@ -4,25 +4,64 @@ apkinstall = {
         $('#apkinstall-btn').click(function () {
             $('#moduleModal').modal("hide");
 
-            localpath = $('#apkinstall-localfile')[0].files[0].path;
-
             dev_list = MainPage.getSelectDevList();
             if (dev_list.length == 0) {
                 alert("Please Select At Least One");
                 return;
             }
-            for (x in dev_list) {
-                ApkInfo.getPackageName(localpath, function (package_name) {
-                    console.info("installing " + package_name);
-                    if ($('#apkinstall-uninstallold').prop("checked")) {
-                        self.uninstall(dev_list[x], package_name, function () {
+
+            var localpath = "";
+
+            if ($('#apkinstall-localfile')[0].files[0] != null) {
+                localpath = $('#apkinstall-localfile')[0].files[0].path;
+
+                for (x in dev_list) {
+                    ApkInfo.getPackageName(localpath, function (package_name) {
+                        console.info("installing " + package_name);
+                        if ($('#apkinstall-uninstallold').prop("checked")) {
+                            self.uninstall(dev_list[x], package_name, function () {
+                                self.install(dev_list[x], localpath)
+                            });
+                        } else {
                             self.install(dev_list[x], localpath)
-                        });
-                    } else {
-                        self.install(dev_list[x], localpath)
-                    }
+                        }
+                    });
+                }
+            } else if ($('#apkinstall-url').val() != "") {
+                url_link = $('#apkinstall-url').val();
+                var http = require('http');
+                var fs = require('fs');
+
+                localpath = "./cache/ai.apk";
+                MainPage.showProgress("Downloading Files");
+
+                var file = fs.createWriteStream(localpath);
+                http.get(url_link, function (response) {
+                    response.pipe(file);
+                    file.on('finish', function () {
+                        file.close();
+                        MainPage.hideProgress();
+
+                        for (x in dev_list) {
+                            ApkInfo.getPackageName(localpath, function (package_name) {
+                                console.info("installing " + package_name);
+                                if ($('#apkinstall-uninstallold').prop("checked")) {
+                                    self.uninstall(dev_list[x], package_name, function () {
+                                        self.install(dev_list[x], localpath)
+                                    });
+                                } else {
+                                    self.install(dev_list[x], localpath)
+                                }
+                            });
+                        }
+                    });
+                }).on('error', function(e) {
+                    console.log("Got Error: " + e.message);
+                    MainPage.hideProgress();
+                    alert("Got Remote File Error: " +e.message);
                 });
             }
+
         });
     },
     /**

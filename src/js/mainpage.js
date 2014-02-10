@@ -52,32 +52,44 @@ var MainPage = {
                 }
             }
 
-            if (shell != null) {
-                // 开始vr
-                var exec = require('child_process').exec;
-                console.info("exec " + shell);
-                child = exec(shell,
-                    function (error, stdout, stderr) {
-                        var hasError = false;
-                        if (stderr != "") {
-                            hasError = true;
-                            console.error('stderr: ' + stderr);
-                        }
-                        if (error !== null) {
-                            hasError = true;
-                            console.error('exec error: ' + error);
-                            stderr = error;
-                        }
-
-                    });
-
-                child.unref();
-            }
-
         });
     },
     showtips: function (type, text) {
 
+    },
+    showProgress: function (tips) {
+        $('#progress-tips').html(tips);
+        $('#progressModal').modal({
+            keyboard: false,
+            show: true,
+            backdrop : 'static'
+        });
+    },
+    hideProgress: function() {
+        $('#progressModal').modal("hide");
+    },
+    runNativeShell: function(shell_cmd, callback) {
+
+        var exec = require('child_process').exec;
+        console.info("exec " + shell_cmd);
+        child = exec(shell_cmd,
+            function (error, stdout, stderr) {
+                var hasError = false;
+                if (stderr != "") {
+                    hasError = true;
+                    console.error('stderr: ' + stderr);
+                }
+                if (error !== null) {
+                    hasError = true;
+                    console.error('exec error: ' + error);
+                    stderr = error;
+                }
+                if (callback != null) {
+                    callback(hasError, stdout, stderr);
+                }
+            });
+
+        child.unref();
     },
     getSelectDevList: function () {
         devlist = [];
