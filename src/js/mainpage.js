@@ -24,22 +24,25 @@ var MainPage = {
         $('#btn-sync').click(function () {
             MainPage.syncDevList();
         });
-
+        // action btn的绑定
         $('.btn-action').click(function () {
-            shell = $(this).attr("shell");
+            devshell = $(this).attr("devshell");
             module = $(this).attr("module");
+            shell = $(this).attr("shell");
+
             if (module != null) {
+                dev_list = self.getSelectDevList();
                 self.loadModule(module);
             }
 
-            if (shell != null) {
+            if (devshell != null) {
                 dev_list = self.getSelectDevList();
                 if (dev_list.length == 0) {
                     alert("Please Select At Least One");
                     return;
                 }
                 for (x in dev_list) {
-                    self.deviceSimpleCommand(dev_list[x], shell, function (hasError, stdout, stderr) {
+                    self.deviceSimpleCommand(dev_list[x], devshell, function (hasError, stdout, stderr) {
                         console.log('stdout: ' + stdout);
                         if (hasError) {
                             throw stderr;
@@ -48,6 +51,29 @@ var MainPage = {
                     });
                 }
             }
+
+            if (shell != null) {
+                // 开始vr
+                var exec = require('child_process').exec;
+                console.info("exec " + shell);
+                child = exec(shell,
+                    function (error, stdout, stderr) {
+                        var hasError = false;
+                        if (stderr != "") {
+                            hasError = true;
+                            console.error('stderr: ' + stderr);
+                        }
+                        if (error !== null) {
+                            hasError = true;
+                            console.error('exec error: ' + error);
+                            stderr = error;
+                        }
+
+                    });
+
+                child.unref();
+            }
+
         });
     },
     showtips: function (type, text) {
@@ -63,8 +89,9 @@ var MainPage = {
         return devlist;
     },
     deviceSimpleCommand: function (dev_id, args, callback) {
+
         // 开始动画
-        var doingbtn = $("tr[devid=" + dev_id + "]").find(".btn-doing");
+        var doingbtn = $("tr[devid='" + dev_id + "']").find(".btn-doing");
         doingbtn.removeClass("hide");
 
         AndroidDevice.adbDeviceSimpleCommand(dev_id, args, function (hasError, stdout, stderr) {

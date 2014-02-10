@@ -3,10 +3,6 @@
  * for device lists
  */
 var AndroidDevice = {
-    adbPath: "",
-    init: function () {
-        this.adbPath = localStorage.adbPath;
-    },
     fetchDevLists: function (callback) {
         if (typeof (require) != 'function') {
             stdout = "stdout: List of devices attached \n1329f0a5-test1\tdevice\n95f0a123-test3\tdevice\n1329f0a5xbc-test2\tdevice(un authorised)\n\n";
@@ -47,14 +43,22 @@ var AndroidDevice = {
      * 执行单个设备的adb命令
      */
     adbDeviceSimpleCommand: function (dev_id, args, callback) {
-        this.adbSimpleCommand(" -d -e -s " + dev_id + " " + args, callback);
+        var self = this;
+        // 前置心跳检测一下 防止block
+        this.adbSimpleCommand(" -s " + dev_id + " shell uptime", function (hasError, stdout, stderr) {
+            if (hasError) {
+                callback(true, stdout, stderr);
+                return;
+            }
+            self.adbSimpleCommand(" -s " + dev_id + " " + args, callback);
+        });
     },
     /**
      * 执行简单adb命令(可以立即有返回值)
      */
     adbSimpleCommand: function (args, callback) {
         var exec = require('child_process').exec,
-            command_line = '/Users/haku-mac/Documents/AndroidSDK/platform-tools/adb ' + args;
+            command_line = localStorage.adbPath + 'adb ' + args;
         console.info("exec " + command_line);
         child = exec(command_line,
             function (error, stdout, stderr) {
