@@ -1,0 +1,19 @@
+<form role="form">
+    <div class="form-group">
+        <label for="uploadfile-localfile">File input</label>
+        <input type="file" id="uploadfile-localfile">
+
+        <p class="help-block">select apk from local computer</p>
+    </div>
+    <div class="form-group">
+        <label for="uploadfile-remote">Remote Path</label>
+        <input type="text" class="form-control" id="uploadfile-remote" placeholder="Remote Path Such As /sdcard/" />
+    </div>
+    <!--<div class="checkbox">
+        <label>
+            <input type="checkbox" id="apkinstall-uninstallold" multiple /> uninstall current version
+        </label>
+    </div>-->
+    <button id="uploadfile-btn" type="button" class="btn btn-default">Upload</button>
+</form>
+<script>uploadfile.init();</script>

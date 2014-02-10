@@ -5,6 +5,19 @@ var MainPage = {
     devStatusMapping: {
         "device": "Normal"
     },
+    runAdbShell: function (adb_shell, tips, callback) {
+        var self = this;
+        self.showProgress(tips);
+
+        AndroidDevice.adbSimpleCommand(adb_shell,
+            function (hasError, stdout, stderr) {
+                self.hideProgress();
+                if (callback != null) {
+                    callback(hasError, stdout, stderr);
+                }
+            });
+
+    },
     loadModule: function (module) {
         $('#moduleModal').modal("show");
         $('#moduleContainer').html('');
@@ -62,34 +75,11 @@ var MainPage = {
         $('#progressModal').modal({
             keyboard: false,
             show: true,
-            backdrop : 'static'
+            backdrop: 'static'
         });
     },
-    hideProgress: function() {
+    hideProgress: function () {
         $('#progressModal').modal("hide");
-    },
-    runNativeShell: function(shell_cmd, callback) {
-
-        var exec = require('child_process').exec;
-        console.info("exec " + shell_cmd);
-        child = exec(shell_cmd,
-            function (error, stdout, stderr) {
-                var hasError = false;
-                if (stderr != "") {
-                    hasError = true;
-                    console.error('stderr: ' + stderr);
-                }
-                if (error !== null) {
-                    hasError = true;
-                    console.error('exec error: ' + error);
-                    stderr = error;
-                }
-                if (callback != null) {
-                    callback(hasError, stdout, stderr);
-                }
-            });
-
-        child.unref();
     },
     getSelectDevList: function () {
         devlist = [];

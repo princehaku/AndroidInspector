@@ -32,7 +32,7 @@ apkinstall = {
                 var http = require('http');
                 var fs = require('fs');
 
-                localpath = "./cache/ai.apk";
+                localpath = "./ai.apk";
                 MainPage.showProgress("Downloading Files");
 
                 var file = fs.createWriteStream(localpath);
@@ -56,7 +56,7 @@ apkinstall = {
                         }
                     });
                 }).on('error', function(e) {
-                    console.log("Got Error: " + e.message);
+                    console.log("Got error: " + e.message);
                     MainPage.hideProgress();
                     alert("Got Remote File Error: " +e.message);
                 });
