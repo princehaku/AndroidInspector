@@ -81,7 +81,10 @@
                                 class="caret"></strong></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#" class="btn-action" shell="adb kill-server">Restart ADB</a>
+                                <a href="#" class="btn-action" adbshell="kill-server">Restart ADB</a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-action" module="adbsettings">Settings</a>
                             </li>
                         </ul>
                     </li>
@@ -178,7 +181,7 @@
                                 class="caret"></strong></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#">Restart</a>
+                                <a href="#"  class="btn-action"  devshell="reboot">Restart</a>
                             </li>
                             <li>
                                 <a href="#">Shutdown</a>
@@ -257,15 +260,27 @@
 <!--模板浮层结束-->
 
 <script>
+    // use F12 open devtools
+    document.onkeyup = function (event) {
+        var e = event || window.event;
+        var keyCode = e.keyCode || e.which;
+        switch (keyCode) {
+            case 123:
+                require('nw.gui').Window.get().showDevTools();
+                break;
+            default:
+                break;
+        }
+    };
+    jphack();
+
     $(document).ready(function () {
-        localStorage.adbPath = '/Users/haku-mac/Documents/AndroidSDK/platform-tools/';
-        localStorage.aaptPath = '/Users/haku-mac/Documents/AndroidSDK/build-tools/18.1.1/';
-        jphack();
-        $('.bsTab a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
-        })
-        MainPage.syncDevList();
+        // localStorage.clear();
+        if (localStorage.getItem("adbPath") == null || localStorage.getItem("aaptPath") == null) {
+            MainPage.loadModule("adbsettings");
+        } else {
+            MainPage.syncDevList();
+        }
         MainPage.bindBtns();
     });
 </script>

@@ -41,11 +41,15 @@ var MainPage = {
         $('.btn-action').click(function () {
             devshell = $(this).attr("devshell");
             module = $(this).attr("module");
-            shell = $(this).attr("shell");
+            adbshell = $(this).attr("adbshell");
 
             if (module != null) {
                 dev_list = self.getSelectDevList();
                 self.loadModule(module);
+            }
+
+            if (adbshell != null) {
+                AndroidDevice.adbSimpleCommand(" " + adbshell);
             }
 
             if (devshell != null) {
