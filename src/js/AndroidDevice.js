@@ -14,6 +14,8 @@ var AndroidDevice = {
                 if (seg.length != 2) {
                     continue;
                 }
+                seg[0] = seg[0].replace(/(^\s*)|(\s*$)/g, "");
+                seg[1] = seg[1].replace(/(^\s*)|(\s*$)/g, "");
                 devlist.push(seg);
             }
             callback(devlist)
@@ -34,6 +36,8 @@ var AndroidDevice = {
                     if (seg.length != 2) {
                         continue;
                     }
+                		seg[0] = seg[0].replace(/(^\s*)|(\s*$)/g, "");
+                		seg[1] = seg[1].replace(/(^\s*)|(\s*$)/g, "");
                     devlist.push(seg);
                 }
                 callback(devlist)
