@@ -32,11 +32,12 @@ apkinstall = {
                 var http = require('http');
                 var fs = require('fs');
 
-                localpath = "./ai.apk";
+                localpath = process.cwd() + "/cache/" + "ai_" + parseInt(Math.random() * 10000) + ".apk";
                 MainPage.showProgress("Downloading Files");
 
                 var file = fs.createWriteStream(localpath);
-                http.get(url_link, function (response) {
+
+                http.get(url_link,function (response) {
                     response.pipe(file);
                     file.on('finish', function () {
                         file.close();
@@ -55,10 +56,10 @@ apkinstall = {
                             });
                         }
                     });
-                }).on('error', function(e) {
+                }).on('error', function (e) {
                     console.log("Got error: " + e.message);
                     MainPage.hideProgress();
-                    alert("Got Remote File Error: " +e.message);
+                    alert("Got Remote File Error: " + e.message);
                 });
             }
 
