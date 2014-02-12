@@ -11,7 +11,7 @@ ApkInfo = {
     },
     packgeInfo: function (apk_path, callback) {
         var exec = require('child_process').exec,
-            command_line = localStorage.aaptPath + 'aapt dump badging ' + apk_path;
+            command_line = "\"" + localStorage.aaptPath + 'aapt" dump badging ' + apk_path;
         console.info("exec " + command_line);
         child = exec(command_line,
             function (error, stdout, stderr) {
