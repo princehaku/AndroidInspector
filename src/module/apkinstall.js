@@ -16,16 +16,20 @@ apkinstall = {
                 localpath = $('#apkinstall-localfile')[0].files[0].path;
 
                 for (x in dev_list) {
-                    ApkInfo.getPackageName(localpath, function (package_name) {
-                        console.info("installing " + package_name);
-                        if ($('#apkinstall-uninstallold').prop("checked")) {
-                            self.uninstall(dev_list[x], package_name, function () {
-                                self.install(dev_list[x], localpath)
-                            });
-                        } else {
-                            self.install(dev_list[x], localpath)
-                        }
-                    });
+                    function fe(dev_id) {
+                        var devid = dev_id;
+                        ApkInfo.getPackageName(localpath, function (package_name) {
+                            console.info("installing " + package_name);
+                            if ($('#apkinstall-uninstallold').prop("checked")) {
+                                self.uninstall(devid, package_name, function (dev_id) {
+                                    self.install(devid, localpath)
+                                });
+                            } else {
+                                self.install(devid, localpath)
+                            }
+                        });
+                    }
+                    fe(dev_list[x]);
                 }
             } else if ($('#apkinstall-url').val() != "") {
                 url_link = $('#apkinstall-url').val();
@@ -44,16 +48,20 @@ apkinstall = {
                         MainPage.hideProgress();
 
                         for (x in dev_list) {
-                            ApkInfo.getPackageName(localpath, function (package_name) {
-                                console.info("installing " + package_name);
-                                if ($('#apkinstall-uninstallold').prop("checked")) {
-                                    self.uninstall(dev_list[x], package_name, function () {
-                                        self.install(dev_list[x], localpath)
-                                    });
-                                } else {
-                                    self.install(dev_list[x], localpath)
-                                }
-                            });
+                            function fe(dev_id) {
+                                var devid = dev_id;
+                                ApkInfo.getPackageName(localpath, function (package_name) {
+                                    console.info("installing " + package_name);
+                                    if ($('#apkinstall-uninstallold').prop("checked")) {
+                                        self.uninstall(devid, package_name, function (dev_id) {
+                                            self.install(devid, localpath)
+                                        });
+                                    } else {
+                                        self.install(devid, localpath)
+                                    }
+                                });
+                            }
+                            fe(dev_list[x]);
                         }
                     });
                 }).on('error', function (e) {
@@ -75,7 +83,7 @@ apkinstall = {
         MainPage.deviceSimpleCommand(dev_id, " uninstall " + packagename, function (hasError, stdout, stderror) {
             console.log("uninstall " + packagename + " done " + stdout);
             if (callback != null) {
-                callback();
+                callback(dev_id);
             }
         });
     },
@@ -94,7 +102,7 @@ apkinstall = {
                 alert("install to " + dev_id + " Error\n" + stdout);
             }
             if (callback != null) {
-                callback();
+                callback(dev_id);
             }
         });
     }

@@ -62,7 +62,7 @@ var AndroidDevice = {
      */
     adbSimpleCommand: function (args, callback) {
         var exec = require('child_process').exec;
-        var command_line = localStorage.adbPath + 'adb ' + args;
+        var command_line = "\"" + localStorage.adbPath + 'adb" ' + args;
         console.info("exec " + command_line);
         child = exec(command_line,
             function (error, stdout, stderr) {
