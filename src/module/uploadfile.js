@@ -6,7 +6,7 @@ uploadfile = {
         $('#uploadfile-btn').click(function () {
             $('#moduleModal').modal("hide");
 
-            dev_list = MainPage.getSelectDevList();
+            dev_list = AI.getSelectDevList();
             if (dev_list.length == 0) {
                 alert("Please Select At Least One");
                 return;
@@ -21,7 +21,7 @@ uploadfile = {
                 for (x in dev_list) {
                     dev_id = dev_list[x];
 
-                    MainPage.deviceSimpleCommand(dev_id, " push \"" + localpath + "\" \"" + remotepath + "\"", function (hasError, stdout, stderror) {
+                    AI.deviceSimpleCommand(dev_id, " push \"" + localpath + "\" \"" + remotepath + "\"", function (hasError, stdout, stderror) {
                         if (stderror != null && stderror.toString().indexOf("failed") > 0) {
                             alert(stderror);
                         } else {

@@ -5,7 +5,7 @@ apkinstall = {
         $('#apkinstall-btn').click(function () {
             $('#moduleModal').modal("hide");
 
-            dev_list = MainPage.getSelectDevList();
+            dev_list = AI.getSelectDevList();
             if (dev_list.length == 0) {
                 alert("Please Select At Least One");
                 return;
@@ -38,7 +38,7 @@ apkinstall = {
                 var fs = require('fs');
 
                 localpath = process.cwd() + "/cache/" + "ai_" + parseInt(Math.random() * 10000) + ".apk";
-                MainPage.showProgress("Downloading Files");
+                AI.showProgress("Downloading Files");
 
                 var file = fs.createWriteStream(localpath);
 
@@ -46,7 +46,7 @@ apkinstall = {
                     response.pipe(file);
                     file.on('finish', function () {
                         file.close();
-                        MainPage.hideProgress();
+                        AI.hideProgress();
 
                         for (x in dev_list) {
                             function fe(dev_id) {
@@ -67,7 +67,7 @@ apkinstall = {
                     });
                 }).on('error', function (e) {
                     console.log("Got error: " + e.message);
-                    MainPage.hideProgress();
+                    AI.hideProgress();
                     alert("Got Remote File Error: " + e.message);
                 });
             }
@@ -81,7 +81,7 @@ apkinstall = {
      * @param callback dev_id
      */
     uninstall: function (dev_id, packagename, callback) {
-        MainPage.deviceSimpleCommand(dev_id, " uninstall " + packagename, function (hasError, stdout, stderror) {
+        AI.deviceSimpleCommand(dev_id, " uninstall " + packagename, function (hasError, stdout, stderror) {
             console.log("uninstall " + packagename + " done " + stdout);
             if (callback != null) {
                 callback(dev_id);
@@ -96,7 +96,7 @@ apkinstall = {
      * @param callback dev_id
      */
     install: function (dev_id, path, callback) {
-        MainPage.deviceSimpleCommand(dev_id, " install " + path, function (hasError, stdout, stderror) {
+        AI.deviceSimpleCommand(dev_id, " install " + path, function (hasError, stdout, stderror) {
             if (stdout.indexOf("Success") > 0) {
                 alert("install to " + dev_id + " Success\n" + stdout);
             } else {

@@ -52,6 +52,7 @@
     </style>
     <script src="js/ApkInfo.js"></script>
     <script src="js/AndroidDevice.js"></script>
+    <script src="js/AI.js"></script>
     <script src="js/mainpage.js"></script>
     <script src="js/jphack.js"></script>
 </head>
@@ -277,7 +278,7 @@
     $(document).ready(function () {
         // localStorage.clear();
         if (localStorage.getItem("adbPath") == null || localStorage.getItem("aaptPath") == null) {
-            MainPage.loadModule("adbsettings");
+            AI.loadModule("adbsettings");
         } else {
             MainPage.syncDevList();
         }

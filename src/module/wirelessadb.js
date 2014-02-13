@@ -7,7 +7,7 @@ wirelessadb = {
             $('#moduleModal').modal("hide");
 
             device_url = $("#wirelessadb-url").val();
-            MainPage.runAdbShell(" connect " + device_url, "connecting", function (hasError, stdout, stderror) {
+            AI.adbSimpleCommand(" connect " + device_url, "connecting", function (hasError, stdout, stderror) {
                 if (hasError) {
                     alert(stderror);
                 } else {

@@ -5,37 +5,11 @@ var MainPage = {
     devStatusMapping: {
         "device": "Normal"
     },
-    runAdbShell: function (adb_shell, tips, callback) {
-        var self = this;
-        self.showProgress(tips);
-
-        AndroidDevice.adbSimpleCommand(adb_shell,
-            function (hasError, stdout, stderr) {
-                self.hideProgress();
-                if (callback != null) {
-                    callback(hasError, stdout, stderr);
-                }
-            });
-
-    },
-    loadModule: function (module) {
-        $('#moduleModal').modal("show");
-        $('#moduleContainer').html('');
-        url = "module/" + module + ".js";
-        $.getScript(url, function () {
-            $.ajax({
-                url: "module/" + module + ".html",
-                success: function (data) {
-                    $('#moduleContainer').html(data);
-                }
-            });
-        });
-    },
     bindBtns: function () {
         var self = this;
 
         $('#btn-sync').click(function () {
-            MainPage.syncDevList();
+            MainPage.syncDevList(true);
         });
         // action btn的绑定
         $('.btn-action').click(function () {
@@ -44,8 +18,8 @@ var MainPage = {
             adbshell = $(this).attr("adbshell");
 
             if (module != null) {
-                dev_list = self.getSelectDevList();
-                self.loadModule(module);
+                dev_list = AI.getSelectDevList();
+                AI.loadModule(module);
             }
 
             if (adbshell != null) {
@@ -53,13 +27,13 @@ var MainPage = {
             }
 
             if (devshell != null) {
-                dev_list = self.getSelectDevList();
+                dev_list = AI.getSelectDevList();
                 if (dev_list.length == 0) {
                     alert("Please Select At Least One");
                     return;
                 }
                 for (x in dev_list) {
-                    self.deviceSimpleCommand(dev_list[x], devshell, function (hasError, stdout, stderr) {
+                    AI.deviceSimpleCommand(dev_list[x], devshell, function (hasError, stdout, stderr) {
                         console.log('stdout: ' + stdout);
                         if (hasError) {
                             throw stderr;
@@ -71,46 +45,12 @@ var MainPage = {
 
         });
     },
-    showtips: function (type, text) {
-
-    },
-    showProgress: function (tips) {
-        $('#progress-tips').html(tips);
-        $('#progressModal').modal({
-            keyboard: false,
-            show: true,
-            backdrop: 'static'
-        });
-    },
-    hideProgress: function () {
-        $('#progressModal').modal("hide");
-    },
-    getSelectDevList: function () {
-        devlist = [];
-        $(".devid:checked").each(function () {
-            if ($(this).attr("devid") != null) {
-                devlist.push($(this).attr("devid"))
-            }
-        });
-        return devlist;
-    },
-    deviceSimpleCommand: function (dev_id, args, callback) {
-
-        // 开始动画
-        var doingbtn = $("tr[devid='" + dev_id + "']").find(".btn-doing");
-        doingbtn.removeClass("hide");
-
-        AndroidDevice.adbDeviceSimpleCommand(dev_id, args, function (hasError, stdout, stderr) {
-            // 结束动画
-            doingbtn.addClass("hide");
-            callback(hasError, stdout, stderr);
-        });
-
-    },
-    syncDevList: function () {
+    syncDevList: function (force) {
         var self = this;
-        // 清空列表
-        $('#devlist').html("");
+        if (force) {
+            // 清空列表
+            $('#devlist').html("");
+        }
 
         AndroidDevice.fetchDevLists(function (devLists) {
             for (x in devLists) {
