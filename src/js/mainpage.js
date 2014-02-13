@@ -9,7 +9,7 @@ var MainPage = {
         var self = this;
 
         $('#btn-sync').click(function () {
-            MainPage.syncDevList(false);
+            MainPage.syncDevList(true);
         });
         // action btn的绑定
         $('.btn-action').click(function () {
@@ -112,6 +112,6 @@ var MainPage = {
                     }
                 });
             }
-        }, true);
+        }, !force);
     }
 }
