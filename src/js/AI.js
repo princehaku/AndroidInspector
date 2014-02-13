@@ -18,7 +18,7 @@ AI = {
     getSelectDevList: function () {
         devlist = [];
         $(".devid:checked").each(function () {
-            if ($(this).attr("devid") != null) {
+            if ($(this).attr("devid") != null && $(this).attr("devid") != "-1") {
                 devlist.push($(this).attr("devid"))
             }
         });

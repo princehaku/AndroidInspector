@@ -3,27 +3,12 @@
  * for device lists
  */
 var AndroidDevice = {
-    fetchDevLists: function (callback) {
-        if (typeof (require) != 'function') {
-            stdout = "stdout: List of devices attached \n1329f0a5-test1\tdevice\n95f0a123-test3\tdevice\n1329f0a5xbc-test2\tdevice(un authorised)\n\n";
-            devices = stdout.split("\n");
-            devlist = [];
-            for (x in devices) {
-                seg = devices[x].split("\t");
-                // 非两段的直接返回
-                if (seg.length != 2) {
-                    continue;
-                }
-                seg[0] = seg[0].replace(/(^\s*)|(\s*$)/g, "");
-                seg[1] = seg[1].replace(/(^\s*)|(\s*$)/g, "");
-                devlist.push(seg);
-            }
-            callback(devlist)
-            return;
-        }
+    fetchDevLists: function (callback, slient_mode) {
         this.adbSimpleCommand('devices',
             function (hasError, stdout, stderr) {
-                console.log('stdout: ' + stdout);
+                if (slient_mode != true) {
+                    console.log('stdout: ' + stdout);
+                }
                 if (hasError) {
                     throw "Can't Run adb " + stderr;
                     return;
@@ -36,12 +21,12 @@ var AndroidDevice = {
                     if (seg.length != 2) {
                         continue;
                     }
-                		seg[0] = seg[0].replace(/(^\s*)|(\s*$)/g, "");
-                		seg[1] = seg[1].replace(/(^\s*)|(\s*$)/g, "");
+                    seg[0] = seg[0].replace(/(^\s*)|(\s*$)/g, "");
+                    seg[1] = seg[1].replace(/(^\s*)|(\s*$)/g, "");
                     devlist.push(seg);
                 }
                 callback(devlist)
-            })
+            }, {slient: slient_mode})
     },
     /**
      * 执行单个设备的adb命令
@@ -60,10 +45,12 @@ var AndroidDevice = {
     /**
      * 执行简单adb命令(可以立即有返回值)
      */
-    adbSimpleCommand: function (args, callback) {
+    adbSimpleCommand: function (args, callback, confiure) {
         var exec = require('child_process').exec;
         var command_line = "\"" + localStorage.adbPath + 'adb" ' + args;
-        console.info("exec " + command_line);
+        if (confiure == null || !(confiure.hasOwnProperty("slient") && confiure.slient == true)) {
+            console.info("exec " + command_line);
+        }
         child = exec(command_line,
             function (error, stdout, stderr) {
                 var hasError = false;
