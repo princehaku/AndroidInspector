@@ -1,6 +1,7 @@
 apkinstall = {
     init: function () {
         var self = this;
+        // 安装按钮
         $('#apkinstall-btn').click(function () {
             $('#moduleModal').modal("hide");
 
@@ -74,10 +75,10 @@ apkinstall = {
         });
     },
     /**
-     * 安装某个包
+     * 卸载某个包
      * @param dev_id
-     * @param path
-     * @param callback args
+     * @param packagename
+     * @param callback dev_id
      */
     uninstall: function (dev_id, packagename, callback) {
         MainPage.deviceSimpleCommand(dev_id, " uninstall " + packagename, function (hasError, stdout, stderror) {
@@ -92,7 +93,7 @@ apkinstall = {
      * 安装某个包
      * @param dev_id
      * @param path
-     * @param callback args
+     * @param callback dev_id
      */
     install: function (dev_id, path, callback) {
         MainPage.deviceSimpleCommand(dev_id, " install " + path, function (hasError, stdout, stderror) {
