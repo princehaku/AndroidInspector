@@ -5,10 +5,10 @@ AI = {
     loadModule: function (module) {
         $('#moduleModal').modal("show");
         $('#moduleContainer').html('');
-        url = "module/" + module + ".js";
+        url = "ai_modules/" + module + ".js";
         $.getScript(url, function () {
             $.ajax({
-                url: "module/" + module + ".html",
+                url: "ai_modules/" + module + ".html",
                 success: function (data) {
                     $('#moduleContainer').html(data);
                 }

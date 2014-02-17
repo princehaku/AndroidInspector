@@ -11,6 +11,7 @@
         "kiosk" : false,
         "frame" : true,
         "toolbar": false,
+        "scrollbar": false,
         "width": 1000,
         "height": 650,
         "min_width": 900,

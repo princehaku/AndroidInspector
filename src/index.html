@@ -196,14 +196,15 @@
         <div class="col-md-8 column">
             <div class="row clearfix">
                 <div>
-                    <ul id="myTab" class="nav nav-tabs">
+                    <input type="text" name="singledevid" id="singledevid"/>
+                    <ul id="deviceTab" class="nav nav-tabs">
                         <li class="active"><a href="#tab-status" data-toggle="tab">Status</a></li>
                         <li class=""><a href="#tab-status" data-toggle="tab">Syslog</a></li>
                         <li class=""><a href="#tab-logcat" data-toggle="tab">LogCat</a></li>
                         <li class=""><a href="#tab-process" data-toggle="tab">Process</a></li>
                         <li class=""><a href="#tab-performance" data-toggle="tab">Performance</a></li>
                     </ul>
-                    <div id="myTabContent" class="tab-content">
+                    <div id="deviceTabContent" class="tab-content">
                         <div class="tab-pane fade" id="tab-status">
                             <p>Under Construction.</p>
                         </div>
@@ -266,6 +267,9 @@
         var e = event || window.event;
         var keyCode = e.keyCode || e.which;
         switch (keyCode) {
+            case 116:
+                location.reload();
+                break;
             case 123:
                 require('nw.gui').Window.get().showDevTools();
                 break;
@@ -282,7 +286,7 @@
         } else {
             setInterval(function() {
                 MainPage.syncDevList(false);
-            }, 300);
+            }, 500);
         }
         MainPage.bindBtns();
     });

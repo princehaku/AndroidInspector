@@ -23,7 +23,7 @@ var MainPage = {
             }
 
             if (adbshell != null) {
-                AndroidDevice.adbSimpleCommand(" " + adbshell);
+                AI.adbSimpleCommand(" " + adbshell, "ADB Doing");
             }
 
             if (devshell != null) {
@@ -43,6 +43,15 @@ var MainPage = {
                 }
             }
 
+        });
+    },
+    bindDeviceCol: function(devCol) {
+        devCol.click(function () {
+            var obj = $(this);
+            if (obj.find('.devid').attr('devid') != null) {
+                $('#singledevid').val(obj.attr('devid'));
+                AI.loadModule("devicesettings");
+            }
         });
     },
     syncDevList: function (force) {
@@ -73,6 +82,7 @@ var MainPage = {
                 devCol.find('.btn-status').tooltip({
                     title: dev[1]
                 });
+                self.bindDeviceCol(devCol);
                 devCol.show();
                 if (force == false) {
                     // 找是否有此节点了 没有就插入 有则更新状态
