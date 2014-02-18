@@ -45,12 +45,23 @@ var MainPage = {
 
         });
     },
-    bindDeviceCol: function(devCol) {
+    bindDeviceCol: function (devCol) {
+        devCol.find(".btn-opitions").click(function (e) {
+            e.stopPropagation();
+            var obj = $(this).parent().parent().parent();
+            var dev_id = obj.attr('devid');
+            $('#singledevid').val(obj.attr('devid'));
+            AI.loadModule("devicesetting");
+
+        });
         devCol.click(function () {
             var obj = $(this);
             if (obj.find('.devid').attr('devid') != null) {
+                var dev_id = obj.attr('devid');
                 $('#singledevid').val(obj.attr('devid'));
-                AI.loadModule("devicesettings");
+                AI.deviceSimpleCommand(dev_id, "shell getprop", function (hasError, stdout, stderr) {
+                    $('#tab-status').html(stdout.replace(/\n/g, "<br />"));
+                })
             }
         });
     },
@@ -67,7 +78,9 @@ var MainPage = {
                 var dev = devLists[x];
                 var devCol = $('.dev_template_original').clone();
                 devCol.attr('devid', dev[0]);
-                devCol.find('.devname').html(dev[0]);
+                var devName = localStorage.hasOwnProperty("alias_" + dev[0]) ?
+                    localStorage.getItem("alias_" + dev[0]) : dev[0];
+                devCol.find('.devname').html(devName);
                 devCol.attr("class", "");
                 devCol.find('.btn-status').css('color', "green");
                 // 不正常的设备标红 正常的打上devid
