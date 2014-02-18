@@ -78,9 +78,12 @@ var MainPage = {
                 var dev = devLists[x];
                 var devCol = $('.dev_template_original').clone();
                 devCol.attr('devid', dev[0]);
-                var devName = localStorage.hasOwnProperty("alias_" + dev[0]) ?
-                    localStorage.getItem("alias_" + dev[0]) : dev[0];
-                devCol.find('.devname').html(devName);
+                var dev_name = dev[0];
+                if (localStorage != null) {
+                    dev_name = localStorage.getItem("alias_" + dev[0]) != null ?
+                        localStorage.getItem("alias_" + dev[0]) : dev_name;
+                }
+                devCol.find('.devname').html(dev_name);
                 devCol.attr("class", "");
                 devCol.find('.btn-status').css('color', "green");
                 // 不正常的设备标红 正常的打上devid

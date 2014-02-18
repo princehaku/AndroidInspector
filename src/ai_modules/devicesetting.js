@@ -7,11 +7,13 @@ devicesetting = {
         $('#devicesetting-btn').click(function () {
             var alias_name = $('#devicesetting-name').val();
             var key = $('#singledevid').val();
-            if (alias_name != "") {
+            if (alias_name == "") {
+                localStorage.removeItem("alias_" + key);
+            } else {
                 localStorage.setItem("alias_" + key, alias_name);
-                $('#moduleModal').modal("hide");
-                MainPage.syncDevList(true);
             }
+            $('#moduleModal').modal("hide");
+            MainPage.syncDevList(true);
         });
     }
 }
