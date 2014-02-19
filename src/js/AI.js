@@ -60,5 +60,8 @@ AI = {
     },
     hideProgress: function () {
         $('#progressModal').modal("hide");
+    },
+    showError: function (tips) {
+        alert(tips);
     }
 }
