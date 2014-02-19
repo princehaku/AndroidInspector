@@ -3,13 +3,13 @@
  * for device lists
  */
 var AndroidDevice = {
-    fetchDevLists: function (callback, slient_mode) {
+    fetchDevLists: function (callback, silent_mode) {
         this.adbSimpleCommand({
                 shell: 'devices',
-                slient: slient_mode
+                silent: silent_mode
             },
             function (hasError, stdout, stderr) {
-                if (slient_mode != true) {
+                if (silent_mode != true) {
                     console.log('stdout: ' + stdout);
                 }
                 if (hasError) {
@@ -36,18 +36,24 @@ var AndroidDevice = {
      */
     adbDeviceSimpleCommand: function (dev_id, args, callback) {
         var self = this;
+        if (typeof(args) == "string") {
+            args = {
+                shell: args
+            }
+        }
+        var args1 = {};
+        var args2 = {};
+        $.extend(args1, args);
+        $.extend(args2, args);
+        args1.shell = " -s " + dev_id + " shell uptime";
         // 前置心跳检测一下 防止block
-        this.adbSimpleCommand(" -s " + dev_id + " shell uptime", function (hasError, stdout, stderr) {
+        this.adbSimpleCommand(args1, function (hasError, stdout, stderr) {
             if (hasError) {
                 callback(true, stdout, stderr);
                 return;
             }
-            if (args.hasOwnProperty("shell")) {
-                var command_line = " -s " + dev_id + " " + args.shell;
-            } else {
-                var command_line = " -s " + dev_id + " " + args;
-            }
-            self.adbSimpleCommand(command_line, callback);
+            args2.shell = " -s " + dev_id + " " + args.shell;
+            self.adbSimpleCommand(args2, callback);
         });
     },
     /**
@@ -60,7 +66,7 @@ var AndroidDevice = {
         } else {
             var command_line = "\"" + localStorage.adbPath + 'adb" ' + args;
         }
-        if (!(args.hasOwnProperty("slient") && args.slient == true)) {
+        if (!(args.hasOwnProperty("silent") && args.silent == true)) {
             console.info("exec " + command_line);
         }
         child = exec(command_line,

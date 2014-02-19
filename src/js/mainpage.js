@@ -82,6 +82,19 @@ var MainPage = {
                 if (localStorage != null) {
                     dev_name = localStorage.getItem("alias_" + dev[0]) != null ?
                         localStorage.getItem("alias_" + dev[0]) : dev_name;
+                    if (localStorage.getItem("alias_" + dev[0]) == null) {
+                        // 太坑爹了. 算了. 异步就异步吧.
+                        AndroidDevice.adbDeviceSimpleCommand(dev[0], {
+                            shell: "shell cat /system/build.prop",
+                            silent: true
+                        }, function (hasErr, stdout, stderr) {
+                            var datas = stdout.match(/ro\.product\.brand=(.*)/);
+                            var brand = datas != null && datas.length == 2 ? datas[1] : "";
+                            var datas = stdout.match(/ro\.product\.model=(.*)/);
+                            var model = datas != null && datas.length == 2 ? datas[1] : "";
+                            localStorage.setItem("alias_" + dev_name, brand + model);
+                        });
+                    }
                 }
                 devCol.find('.devname').html(dev_name);
                 devCol.attr("class", "");
@@ -109,7 +122,10 @@ var MainPage = {
                         continue;
                     }
                     dev_old_id = devtr.find('.devid').attr('devid');
-                    if (dev_old_id != devCol.find('.devid').attr('devid')) {
+                    dev_old_name = devtr.find('.devname').html();
+                    // devid不同 或者 name不同就替换
+                    if (dev_old_id != devCol.find('.devid').attr('devid') ||
+                        dev_old_name != devCol.find('.devname').html()) {
                         console.log("devid:\"" + dev[0] + "\" Status Changed");
                         devtr.replaceWith(devCol);
                         continue;

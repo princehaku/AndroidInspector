@@ -16,7 +16,6 @@ devicesetting = {
                 localStorage.setItem("alias_" + key, alias_name);
             }
             $('#moduleModal').modal("hide");
-            MainPage.syncDevList(true);
         });
     }
 }
