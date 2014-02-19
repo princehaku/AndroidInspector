@@ -1,3 +1,6 @@
+/**
+ * Created by haku-mac on 14-2-19.
+ */
 devicesetting = {
     init: function () {
         var key = $('#singledevid').val();

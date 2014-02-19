@@ -152,7 +152,7 @@
                                 <a href="#" class="btn-action" module="apkinstall">Install APK</a>
                             </li>
                             <li>
-                                <a href="#" class="btn-action" module="uploadfile">Upload File</a>
+                                <a href="#" class="btn-action" module="uploadfile">Push File</a>
                             </li>
                         </ul>
                     </li>
@@ -161,16 +161,20 @@
                                 class="caret"></strong></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#">WIFI ON</a>
+                                <a href="#" class="btn-action tips" devshell="shell su -c 'svc wifi enable'"
+                                   data-toggle="tooltip" data-placement="right" title="root needed">WIFI ON</a>
                             </li>
                             <li>
-                                <a href="#">WIFI OFF</a>
+                                <a href="#" class="btn-action tips" devshell="shell su -c 'svc wifi disable'"
+                                   data-toggle="tooltip" data-placement="right" title="root needed">WIFI OFF</a>
                             </li>
                             <li>
-                                <a href="#">GPRS ON</a>
+                                <a href="#" class="btn-action tips" devshell="shell su -c 'svc data enable'"
+                                   data-toggle="tooltip" data-placement="right" title="root needed">DATA ON</a>
                             </li>
                             <li>
-                                <a href="#">GPRS OFF</a>
+                                <a href="#" class="btn-action tips" devshell="shell su -c 'svc data disable'"
+                                   data-toggle="tooltip" data-placement="right" title="root needed">DATA OFF</a>
                             </li>
                         </ul>
                     </li>
@@ -179,7 +183,7 @@
                                 class="caret"></strong></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#">Run SHELL</a>
+                                <a href="#" class="btn-action" module="multishell">Run SHELL</a>
                             </li>
                         </ul>
                     </li>
@@ -188,7 +192,7 @@
                                 class="caret"></strong></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#"  class="btn-action"  devshell="reboot">Restart</a>
+                                <a href="#" class="btn-action" devshell="reboot">Restart</a>
                             </li>
                             <li>
                                 <a href="#">Shutdown</a>
@@ -293,10 +297,11 @@
         if (localStorage.getItem("adbPath") == null || localStorage.getItem("aaptPath") == null) {
             AI.loadModule("adbsettings");
         } else {
-            setInterval(function() {
+            setInterval(function () {
                 MainPage.syncDevList(false);
             }, 500);
         }
+        $('.tips').tooltip();
         MainPage.bindBtns();
     });
 </script>

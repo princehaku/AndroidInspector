@@ -4,7 +4,10 @@
  */
 var AndroidDevice = {
     fetchDevLists: function (callback, slient_mode) {
-        this.adbSimpleCommand('devices',
+        this.adbSimpleCommand({
+                shell: 'devices',
+                slient: slient_mode
+            },
             function (hasError, stdout, stderr) {
                 if (slient_mode != true) {
                     console.log('stdout: ' + stdout);
@@ -26,7 +29,7 @@ var AndroidDevice = {
                     devlist.push(seg);
                 }
                 callback(devlist)
-            }, {slient: slient_mode})
+            })
     },
     /**
      * 执行单个设备的adb命令
@@ -39,16 +42,25 @@ var AndroidDevice = {
                 callback(true, stdout, stderr);
                 return;
             }
-            self.adbSimpleCommand(" -s " + dev_id + " " + args, callback);
+            if (args.hasOwnProperty("shell")) {
+                var command_line = " -s " + dev_id + " " + args.shell;
+            } else {
+                var command_line = " -s " + dev_id + " " + args;
+            }
+            self.adbSimpleCommand(command_line, callback);
         });
     },
     /**
      * 执行简单adb命令(可以立即有返回值)
      */
-    adbSimpleCommand: function (args, callback, confiure) {
+    adbSimpleCommand: function (args, callback) {
         var exec = require('child_process').exec;
-        var command_line = "\"" + localStorage.adbPath + 'adb" ' + args;
-        if (confiure == null || !(confiure.hasOwnProperty("slient") && confiure.slient == true)) {
+        if (args.hasOwnProperty("shell")) {
+            var command_line = "\"" + localStorage.adbPath + 'adb" ' + args.shell;
+        } else {
+            var command_line = "\"" + localStorage.adbPath + 'adb" ' + args;
+        }
+        if (!(args.hasOwnProperty("slient") && args.slient == true)) {
             console.info("exec " + command_line);
         }
         child = exec(command_line,
