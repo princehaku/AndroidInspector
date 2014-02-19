@@ -45,6 +45,7 @@ var AndroidDevice = {
         $.extend(args1, args);
         $.extend(args2, args);
         args1.shell = " -s " + dev_id + " shell uptime";
+        args1.silent = true;
         // 前置心跳检测一下 防止block
         this.adbSimpleCommand(args1, function (hasError, stdout, stderr) {
             if (hasError) {

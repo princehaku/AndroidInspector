@@ -49,6 +49,7 @@ AI = {
         AndroidDevice.adbSimpleCommand(args.shell,
             function (hasError, stdout, stderr) {
                 self.hideProgress();
+                // 记录到device log
                 if (callback != null) {
                     callback(hasError, stdout, stderr);
                 }
