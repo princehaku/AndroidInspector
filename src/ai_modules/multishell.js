@@ -20,7 +20,7 @@ multishell = {
                 function fe(dev_id) {
                     AI.deviceSimpleCommand(dev_id, {
                         "shell" : "shell " + command,
-                        "timeout" : 10000
+                        "timeout" : 30000
                     }, function () {
 
                     });

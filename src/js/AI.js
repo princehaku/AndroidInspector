@@ -24,6 +24,11 @@ AI = {
         });
         return devlist;
     },
+    devicePipeCommand: function (dev_id, args, pipfunction) {
+
+        AndroidDevice.adbDeviceSimpleCommand(dev_id, args, pipfunction);
+
+    },
     deviceSimpleCommand: function (dev_id, args, callback) {
 
         // 开始动画
@@ -37,11 +42,11 @@ AI = {
         });
 
     },
-    adbSimpleCommand: function (adb_shell, tips, callback) {
+    adbSimpleCommand: function (args, callback) {
         var self = this;
-        self.showProgress(tips);
+        self.showProgress(args.tips);
 
-        AndroidDevice.adbSimpleCommand(adb_shell,
+        AndroidDevice.adbSimpleCommand(args.shell,
             function (hasError, stdout, stderr) {
                 self.hideProgress();
                 if (callback != null) {

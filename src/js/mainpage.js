@@ -23,7 +23,7 @@ var MainPage = {
             }
 
             if (adbshell != null) {
-                AI.adbSimpleCommand(" " + adbshell, "ADB Doing");
+                AI.adbSimpleCommand({shell: " " + adbshell, tips: "ADB Doing"}, null);
             }
 
             if (devshell != null) {
@@ -71,7 +71,6 @@ var MainPage = {
             // 清空列表
             $('#devlist').html("");
         }
-        try {
             AndroidDevice.fetchDevLists(function (devLists) {
 
                 for (x in devLists) {
@@ -155,9 +154,5 @@ var MainPage = {
                     });
                 }
             }, !force);
-
-        } catch (ex) {
-            AI.showError(stderr);
-        }
     }
 }

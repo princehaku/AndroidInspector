@@ -13,8 +13,7 @@ var AndroidDevice = {
                     console.log('stdout: ' + stdout);
                 }
                 if (hasError) {
-                    throw "Can't Run adb " + stderr;
-                    return;
+                    return [];
                 }
                 devices = stdout.split("\n");
                 devlist = [];
@@ -61,15 +60,27 @@ var AndroidDevice = {
      */
     adbSimpleCommand: function (args, callback) {
         var exec = require('child_process').exec;
-        if (args.hasOwnProperty("shell")) {
-            var command_line = "\"" + localStorage.adbPath + 'adb" ' + args.shell;
-        } else {
-            var command_line = "\"" + localStorage.adbPath + 'adb" ' + args;
+        if (!args.hasOwnProperty("shell")) {
+            args = {
+                shell: args
+            }
         }
         if (!(args.hasOwnProperty("silent") && args.silent == true)) {
-            console.info("exec " + command_line);
+            console.info("exec adb " + args.shell);
         }
-        child = exec(command_line,
+        args.shell = "\"" + localStorage.adbPath + 'adb" ' + args.shell;
+        var timeout = 0;
+        if (!(args.hasOwnProperty("timeout"))) {
+            timeout = args.timeout;
+        }
+        child = exec(args.shell, {
+                encoding: 'utf8',
+                timeout: timeout,
+                maxBuffer: 200 * 1024,
+                killSignal: 'SIGTERM',
+                cwd: null,
+                env: null
+            },
             function (error, stdout, stderr) {
                 var hasError = false;
                 if (stderr != "") {
