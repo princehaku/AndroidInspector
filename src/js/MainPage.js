@@ -93,16 +93,22 @@ var MainPage = {
                         localStorage.getItem("alias_" + dev[0]) : dev_name;
                     if (localStorage.getItem("alias_" + dev[0]) == null) {
                         // 太坑爹了. 算了. 异步就异步吧.
-                        AndroidDevice.adbDeviceSimpleCommand(dev[0], {
-                            shell: "shell cat /system/build.prop",
-                            silent: true
-                        }, function (hasErr, stdout, stderr) {
-                            var datas = stdout.match(/ro\.product\.brand=(.*)/);
-                            var brand = datas != null && datas.length == 2 ? datas[1] : "";
-                            var datas = stdout.match(/ro\.product\.model=(.*)/);
-                            var model = datas != null && datas.length == 2 ? datas[1] : "";
-                            localStorage.setItem("alias_" + dev_name, brand + " " + model);
-                        });
+                        (function (dev_name, devid) {
+                            AndroidDevice.adbDeviceSimpleCommand(devid, {
+                                shell: "shell cat /system/build.prop",
+                                silent: true
+                            }, function (hasErr, stdout, stderr) {
+                                var datas = stdout.match(/ro\.product\.brand=(.*)/);
+                                var brand = datas != null && datas.length == 2 ? datas[1] : "";
+                                var datas = stdout.match(/ro\.product\.model=(.*)/);
+                                var model = datas != null && datas.length == 2 ? datas[1] : "";
+                                if (brand != "" || model != "") {
+                                    localStorage.setItem("alias_" + dev_name, brand + " " + model);
+                                } else {
+                                    localStorage.setItem("alias_" + dev_name, devid);
+                                }
+                            });
+                        })(dev_name, dev[0]);
                     }
                 }
                 devCol.find('.devname').html(dev_name);
