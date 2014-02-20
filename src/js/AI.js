@@ -38,6 +38,8 @@ AI = {
         AndroidDevice.adbDeviceSimpleCommand(dev_id, args, function (hasError, stdout, stderr) {
             // 结束动画
             doingbtn.addClass("hide");
+            // 记录到device log
+
             callback(hasError, stdout, stderr);
         });
 
@@ -49,7 +51,6 @@ AI = {
         AndroidDevice.adbSimpleCommand(args.shell,
             function (hasError, stdout, stderr) {
                 self.hideProgress();
-                // 记录到device log
                 if (callback != null) {
                     callback(hasError, stdout, stderr);
                 }

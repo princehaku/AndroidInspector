@@ -30,6 +30,7 @@ apkinstall = {
                             }
                         });
                     }
+
                     fe(dev_list[x]);
                 }
             } else if ($('#apkinstall-url').val() != "") {
@@ -37,7 +38,10 @@ apkinstall = {
                 var http = require('http');
                 var fs = require('fs');
 
-                localpath = process.cwd() + "/cache/" + "ai_" + parseInt(Math.random() * 10000) + ".apk";
+                var date = (new Date()).Format("yyyy-MM-dd_hh:mm:ss");
+                var str = date;
+
+                localpath = process.cwd() + "/cache/" + "ai_" + str + ".apk";
                 AI.showProgress("Downloading Files");
 
                 var file = fs.createWriteStream(localpath);
@@ -62,6 +66,7 @@ apkinstall = {
                                     }
                                 });
                             }
+
                             fe(dev_list[x]);
                         }
                     });
