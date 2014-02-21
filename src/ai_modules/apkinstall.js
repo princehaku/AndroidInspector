@@ -70,23 +70,21 @@ apkinstall = {
         var intent_name = ""
         var async = require("async");
         async.series([function (callback) {
-                ApkInfo.getPackageName(localpath, function (pacname) {
-                    package_name = pacname;
-                    callback();
-                });
-            }, function (callback) {
-                ApkInfo.getPackageStartIntent(localpath, function (intent) {
-                    intent_name = intent;
-                    callback();
-                });
-            }, function (callback) {
-                console.info("starting " + package_name + "/" + intent);
-                AI.deviceSimpleCommand(dev_id, "shell am start " + package_name + "/" + intent, function (hasError, stdout, stderror) {
-                    if (callback != null) {
-                        callback(dev_id);
-                    }
-                });
-            }],pcallback);
+            ApkInfo.getPackageName(localpath, function (pacname) {
+                package_name = pacname;
+                callback();
+            });
+        }, function (callback) {
+            ApkInfo.getPackageStartIntent(localpath, function (intent) {
+                intent_name = intent;
+                callback();
+            });
+        }, function (callback) {
+            console.info("starting " + package_name + "/" + intent_name);
+            AI.deviceSimpleCommand(dev_id, "shell am start " + package_name + "/" + intent_name, function (hasError, stdout, stderror) {
+                callback();
+            });
+        }], pcallback);
     },
     /**
      * 安装某个包
