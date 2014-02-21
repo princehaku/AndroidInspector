@@ -4,3 +4,5 @@ rm -rf $appname
 cp -r nw-mac/node-webkit.app ./$appname
 cp -r src $appname/Contents/Resources/app.nw
 cp -r build-res/nw.icns $appname/Contents/Resources/nw.icns
+mkdir -p release
+mv $appname release/
