@@ -9,6 +9,12 @@ ApkInfo = {
             callback(packages[1]);
         });
     },
+    getPackageStartIntent: function (apk_path, callback) {
+        this.packgeInfo(apk_path, function (package_info) {
+            packages = package_info.match("launchable-activity: name='(.*?)'")
+            callback(packages[1]);
+        });
+    },
     packgeInfo: function (apk_path, callback) {
         var exec = require('child_process').exec,
             command_line = "\"" + localStorage.aaptPath + 'aapt" dump badging ' + apk_path;
