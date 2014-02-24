@@ -71,6 +71,9 @@ apkinstall = {
         var async = require("async");
         async.series([function (callback) {
             ApkInfo.getPackageName(localpath, function (pacname) {
+                if (package_name == "") {
+                    return;
+                }
                 package_name = pacname;
                 callback();
             });
@@ -113,6 +116,10 @@ apkinstall = {
             function (callback) {
                 if ($('#apkinstall-uninstallold').prop("checked")) {
                     ApkInfo.getPackageName(localpath, function (package_name) {
+                        if (package_name == "") {
+                            alert("No A Validate Package");
+                            return;
+                        }
                         self.uninstall(dev_id, package_name, function () {
                             callback();
                         });

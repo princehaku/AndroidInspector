@@ -5,13 +5,21 @@
 ApkInfo = {
     getPackageName: function (apk_path, callback) {
         this.packgeInfo(apk_path, function (package_info) {
-            packages = package_info.match("package: name='(.*?)'")
+            var packages = package_info.match("package: name='(.*?)'");
+            if (packages == null) {
+                callback("");
+                return;
+            }
             callback(packages[1]);
         });
     },
     getPackageStartIntent: function (apk_path, callback) {
         this.packgeInfo(apk_path, function (package_info) {
-            packages = package_info.match("launchable-activity: name='(.*?)'")
+            var packages = package_info.match("launchable-activity: name='(.*?)'");
+            if (packages == null) {
+                callback("");
+                return;
+            }
             callback(packages[1]);
         });
     },
