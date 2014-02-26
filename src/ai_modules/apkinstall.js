@@ -117,7 +117,7 @@ apkinstall = {
                 if ($('#apkinstall-uninstallold').prop("checked")) {
                     ApkInfo.getPackageName(localpath, function (package_name) {
                         if (package_name == "") {
-                            alert("No A Validate Package");
+                            alert("Not A Validate Package");
                             return;
                         }
                         self.uninstall(dev_id, package_name, function () {

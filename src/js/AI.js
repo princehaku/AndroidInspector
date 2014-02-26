@@ -39,7 +39,11 @@ AI = {
             // 结束动画
             doingbtn.addClass("hide");
             // 记录到device log
-
+            if (hasError) {
+                DeviceLog.log(dev_id, "exec: " + args + "\n" + stdout + stderr, "ERROR");
+            } else {
+                DeviceLog.log(dev_id, "exec: " + args + "\n" + stdout + stderr, "INFO");
+            }
             callback(hasError, stdout, stderr);
         });
 

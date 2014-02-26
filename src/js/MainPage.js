@@ -46,8 +46,10 @@ var MainPage = {
         });
 
         // tab上btn的绑定
+        this.bindDevTabsClick();
     },
     bindDeviceCol: function (devCol) {
+        var self = this;
         // 右边的选项按钮
         devCol.find(".btn-opitions").click(function (e) {
             e.stopPropagation();
@@ -69,10 +71,31 @@ var MainPage = {
             if (obj.find('.devid').attr('devid') != null) {
                 var dev_id = obj.attr('devid');
                 $('#singledevid').val(obj.attr('devid'));
-                AI.deviceSimpleCommand(dev_id, "shell getprop", function (hasError, stdout, stderr) {
-                    $('#tab-status').html(stdout.replace(/\n/g, "<br />"));
-                })
+                var tab_name = $('#deviceTab li[class=active] a').attr('href').replace("#", "");
+                var target_tab = $('#' + tab_name);
+                self.tabClick(tab_name, dev_id, target_tab);
             }
+        });
+    },
+    tabClick: function (tab_name, dev_id, target_tab) {
+        if (tab_name == 'tab-status') {
+            AI.deviceSimpleCommand(dev_id, "shell getprop", function (hasError, stdout, stderr) {
+                target_tab.html(stdout.replace(/\n/g, "<br />"));
+            });
+        } else if (tab_name == 'tab-syslog') {
+            target_tab.html(DeviceLog.getLogsHTML(dev_id));
+        }
+    },
+    bindDevTabsClick: function () {
+        var self = this;
+        $('#deviceTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var dev_id = $('#singledevid').val();
+            if (dev_id == "") {
+                return;
+            }
+            var tab_name = $(e.target).attr('href').replace("#", "");
+            var target_tab = $('#' + tab_name);
+            self.tabClick(tab_name, dev_id, target_tab);
         });
     },
     syncDevList: function (force) {
@@ -98,6 +121,7 @@ var MainPage = {
                                 shell: "shell cat /system/build.prop",
                                 silent: true
                             }, function (hasErr, stdout, stderr) {
+                                // 将品牌+型号作为默认值放入ls
                                 var datas = stdout.match(/ro\.product\.brand=(.*)/);
                                 var brand = datas != null && datas.length == 2 ? datas[1] : "";
                                 var datas = stdout.match(/ro\.product\.model=(.*)/);
@@ -128,6 +152,7 @@ var MainPage = {
                 });
                 self.bindDeviceCol(devCol);
                 devCol.show();
+                // 非强制更新的时候只更新变化的节点
                 if (force == false) {
                     // 找是否有此节点了 没有就插入 有则更新状态
                     devtr = $("tr[devid=\"" + dev[0] + "\"]");
@@ -150,7 +175,7 @@ var MainPage = {
                 }
                 $('#devlist').append(devCol);
             }
-            // 反向找detached的device
+            // 反向找detached的device 处理他们的状态
             if (force == false) {
                 $('#devlist').find('tr').each(function () {
                     var live_dev_id = $(this).attr('devid');
