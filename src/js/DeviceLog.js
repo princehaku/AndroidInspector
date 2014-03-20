@@ -19,5 +19,12 @@ DeviceLog = {
             this.logData.dev_id = [];
         }
         return this.logData.dev_id.join("<br />");
+    },
+    pipLog: function (dev_id, target_tab) {
+        target_tab.html("");
+        setInterval(function () {
+            target_tab.html(DeviceLog.getLogsHTML(dev_id));
+            target_tab.scrollTop(target_tab.prop("scrollHeight"));
+        }, 300);
     }
 }

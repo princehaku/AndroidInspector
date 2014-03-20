@@ -83,7 +83,7 @@ var MainPage = {
                 target_tab.html(stdout.replace(/\n/g, "<br />"));
             });
         } else if (tab_name == 'tab-syslog') {
-            target_tab.html(DeviceLog.getLogsHTML(dev_id));
+            DeviceLog.pipLog(dev_id, target_tab);
         }
     },
     bindDevTabsClick: function () {

@@ -38,11 +38,12 @@ AI = {
         AndroidDevice.adbDeviceSimpleCommand(dev_id, args, function (hasError, stdout, stderr) {
             // 结束动画
             doingbtn.addClass("hide");
+            var shell = args.hasOwnProperty("shell") ? args.shell : args;
             // 记录到device log
             if (hasError) {
-                DeviceLog.log(dev_id, "exec: " + args + "\n" + stdout + stderr, "ERROR");
+                DeviceLog.log(dev_id, "exec: " + shell + "\n" + stdout + stderr, "ERROR");
             } else {
-                DeviceLog.log(dev_id, "exec: " + args + "\n" + stdout + stderr, "INFO");
+                DeviceLog.log(dev_id, "exec: " + shell + "\n" + stdout + stderr, "INFO");
             }
             callback(hasError, stdout, stderr);
         });
