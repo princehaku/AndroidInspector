@@ -8,17 +8,7 @@ adbsettings = {
     },
     init: function () {
         var fs = require('fs');
-
         var self = this;
-
-        for (key in self.valueBinding) {
-            $($(key).attr("for")).html(localStorage.getItem(self.valueBinding[key]));
-
-            $(key).change(function (evt) {
-                forsel = $(this).attr("for");
-                $(forsel).html($(this).val());
-            });
-        }
 
         $("#adbsettings-btn").click(function () {
             $('#moduleModal').modal("hide");
@@ -31,6 +21,26 @@ adbsettings = {
                 }
                 localStorage.setItem(self.valueBinding[key], path);
             }
+
+            window.document.location.reload();
         });
+
+        for (key in self.valueBinding) {
+            var path = localStorage.getItem(self.valueBinding[key]);
+            if (path == null) {
+                var isWin = /^win/.test(process.platform);
+                var platformFix = "win";
+                if (!isWin) {
+                    platformFix = process.platform.match(".*?darwin.*?") ? "mac" : "linux";
+                }
+                path = require('path').dirname(process.cwd() + "/buildin-tools/" + platformFix + "/adb") + "/";
+            }
+            $($(key).attr("for")).html(path);
+
+            $(key).change(function (evt) {
+                forsel = $(this).attr("for");
+                $(forsel).html($(this).val());
+            });
+        }
     }
 }
