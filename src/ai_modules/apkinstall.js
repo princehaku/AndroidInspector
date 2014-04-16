@@ -70,21 +70,28 @@ apkinstall = {
         var intent_name = ""
         var async = require("async");
         async.series([function (callback) {
+            // getPackageName
             ApkInfo.getPackageName(localpath, function (pacname) {
-                if (package_name == "") {
+                if (pacname == "") {
                     return;
                 }
                 package_name = pacname;
                 callback();
             });
         }, function (callback) {
+            // getStartIntent
             ApkInfo.getPackageStartIntent(localpath, function (intent) {
+                console.info("get start intent " + intent);
+                if (intent == "") {
+                    return;
+                }
                 intent_name = intent;
                 callback();
             });
         }, function (callback) {
+            // RunIt
             console.info("starting " + package_name + "/" + intent_name);
-            AI.deviceSimpleCommand(dev_id, "shell am start " + package_name + "/" + intent_name, function (hasError, stdout, stderror) {
+            AI.deviceSimpleCommand(dev_id, "shell am start -n \"" + package_name + "/" + intent_name + "\"", function (hasError, stdout, stderror) {
                 callback();
             });
         }], pcallback);
