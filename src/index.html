@@ -370,6 +370,7 @@
         if (localStorage.getItem("adbPath") == null || localStorage.getItem("aaptPath") == null) {
             AI.loadModule("adbsettings");
         } else {
+            MainPage.syncDevList(false);
             setInterval(function () {
                 MainPage.syncDevList(false);
             }, 3000);
